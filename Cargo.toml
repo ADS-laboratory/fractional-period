@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# time-complexity-plot = { git = "https://github.com/ADS-laboratory/time-complexity-plot", branch = "main" }
-time-complexity-plot = { path = "../time-complexity-plot" }
+time-complexity-plot = { git = "https://github.com/ADS-laboratory/time-complexity-plot", branch = "main" }
+#time-complexity-plot = { path = "../time-complexity-plot" }
