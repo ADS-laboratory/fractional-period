@@ -15,7 +15,7 @@ fn main() {
     let file_name = "plotters-doc-data/tick_control.svg";
 
     let result_clone = results.clone();
-    result_clone.serialize("results.json");
+    result_clone.serialize_json("results.json");
     /*
     for result in result_clone.measurements {
         let log_linear_regression = result.log_scale().linear_regression();
