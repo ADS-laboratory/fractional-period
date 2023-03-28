@@ -6,7 +6,7 @@ fn main() {
     // Create new exponential distribution
     let rnd = Distribution::new(EXPONENTIAL, 1000, 500_000);
 
-    let strings = rnd.create_random_strings(METHOD1, vec!['a', 'b'], 100);
+    let strings = rnd.create_random_strings(METHOD1, &vec!['a', 'b'], 100);
 
     let algorithms = vec![PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART];
 
