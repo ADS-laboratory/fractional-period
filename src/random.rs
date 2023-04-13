@@ -3,7 +3,7 @@ use std::ops::Deref;
 use time_complexity_plot::input::Input;
 
 #[derive(Clone)]
-pub struct InputString(Vec<u8>);
+pub struct InputString(pub Vec<u8>);
 impl Deref for InputString {
     type Target = Vec<u8>;
 
@@ -111,10 +111,10 @@ impl StringGen {
     /// # Examples
     ///
     /// ```
-    /// use time_complexity_plot::random::strings::{METHOD1, StringGen};
+    /// use fractional_period::random::{StringGenFunction::CreateRandomString1, StringGen};
     ///
-    /// let char_set = vec!['a', 'b', 'c'];
-    /// let string_gen = StringGen::new(METHOD1, char_set);
+    /// let char_set = vec![b'a', b'b', b'c'];
+    /// let string_gen = StringGen::new(CreateRandomString1, char_set);
     /// ```
     pub fn new(function: StringGenFunction, char_set: Vec<u8>) -> Self {
         assert!(!char_set.is_empty(), "The character set must not be empty");

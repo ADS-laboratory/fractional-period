@@ -3,8 +3,9 @@ use fractional_period::random::{String, StringGen, StringGenFunction};
 
 use time_complexity_plot::{
     input::{
-        distribution::{DistributionBuilder, EXPONENTIAL},
         InputBuilder,
+        distribution::DistributionBuilder,
+        impls::distribution::EXPONENTIAL
     },
     measurements::measure,
     plot::time_plot,
