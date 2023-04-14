@@ -1,9 +1,10 @@
 use fractional_period::algorithms::{period_naive1, period_naive2, period_smart};
-use fractional_period::random::{String, StringGen, StringGenFunction};
+use fractional_period::random::{StringGen, StringGenFunction};
 
 use time_complexity_plot::{
     input::{
-        distribution::{DistributionBuilder, EXPONENTIAL},
+        distribution::DistributionBuilder,
+        impls::distribution::EXPONENTIAL,
         InputBuilder,
     },
     measurements::measure,
@@ -19,9 +20,9 @@ fn main() {
 
     let strings = string_builder.build_with_repetitions(200, 1);
 
-    let algorithms: Vec<fn(String) -> usize> = vec![period_naive1, period_naive2, period_smart];
+    let algorithms = &[period_naive1, period_naive2, period_smart];
 
-    let results = measure(&strings, &algorithms, 0.001);
+    let results = measure(&strings, algorithms, 0.001);
 
     let file_name = "plotters-doc-data/tick_control.svg";
 
