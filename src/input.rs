@@ -4,6 +4,14 @@ use time_complexity_plot::input::Input;
 
 #[derive(Clone)]
 pub struct InputString(pub Vec<u8>);
+
+impl From<&str> for InputString {
+    fn from(s: &str) -> Self {
+        // TODO: check for ascii characters
+        InputString(s.as_bytes().to_vec())
+    }
+}
+
 impl Deref for InputString {
     type Target = Vec<u8>;
 
@@ -11,9 +19,8 @@ impl Deref for InputString {
         &self.0
     }
 }
-pub type String = InputString;
 
-impl Input for String {
+impl Input for InputString {
     type Builder = StringGen;
 
     fn get_size(&self) -> usize {
@@ -45,7 +52,7 @@ fn create_random_string2(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
         // generate random character
         let char_index = thread_rng().gen_range(0..number_of_chars);
         let char = char_set[char_index];
-        s.push(char as u8);
+        s.push(char);
     }
     for i in q..n {
         let char = s[(i - 1) % (q + 1)];
@@ -54,8 +61,32 @@ fn create_random_string2(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
     s
 }
 
-fn create_random_string3(_n: usize, _char_set: &Vec<u8>) -> Vec<u8> {
-    todo!()
+fn create_random_string3(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
+    // new ascii character
+    fn new_char(char_set: &[u8]) -> u8 {
+        for i in 0..128 {
+            if !char_set.contains(&i) {
+                return i;
+            }
+        }
+        panic!("No new character found");
+    }
+
+    let mut s: Vec<u8> = Vec::with_capacity(n);
+    let number_of_chars = char_set.len();
+    let q = thread_rng().gen_range(0..n);
+    for _ in 0..q {
+        // generate random character
+        let char_index = thread_rng().gen_range(0..number_of_chars);
+        let char = char_set[char_index];
+        s.push(char);
+    }
+    s.push(new_char(char_set));
+    for i in q + 1..n {
+        let char = s[(i - 1) % (q + 1)];
+        s.push(char);
+    }
+    s
 }
 
 fn create_random_string4(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
@@ -111,7 +142,7 @@ impl StringGen {
     /// # Examples
     ///
     /// ```
-    /// use fractional_period::random::{StringGenFunction::CreateRandomString1, StringGen};
+    /// use fractional_period::input::{StringGenFunction::CreateRandomString1, StringGen};
     ///
     /// let char_set = vec![b'a', b'b', b'c'];
     /// let string_gen = StringGen::new(CreateRandomString1, char_set);

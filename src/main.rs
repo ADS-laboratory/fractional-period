@@ -1,12 +1,8 @@
 use fractional_period::algorithms::{period_naive1, period_naive2, period_smart};
-use fractional_period::random::{StringGen, StringGenFunction};
+use fractional_period::input::{StringGen, StringGenFunction};
 
 use time_complexity_plot::{
-    input::{
-        InputBuilder,
-        distribution::DistributionBuilder,
-        impls::distribution::EXPONENTIAL
-    },
+    input::{distribution::DistributionBuilder, impls::distribution::EXPONENTIAL, InputBuilder},
     measurements::measure,
     plot::time_plot,
 };

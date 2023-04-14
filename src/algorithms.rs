@@ -1,11 +1,11 @@
-use crate::random::String;
+use crate::input::InputString;
 
 /// Representation of an algorithm &\[[u8]] -> [usize]
 pub struct Algorithm {
     /// The name of the algorithm
     pub name: &'static str,
     /// The function implemented by the algorithm
-    pub function: fn(String) -> usize,
+    pub function: fn(InputString) -> usize,
 }
 
 // Some predefined algorithms for finding the period of a string:
@@ -36,7 +36,7 @@ pub const PERIOD_SMART: Algorithm = Algorithm {
 /// # Arguments
 ///
 /// * `s` - The string to be analyzed
-pub fn period_naive1(s: String) -> usize {
+pub fn period_naive1(s: InputString) -> usize {
     let n = s.len();
 
     'outer: for i in 1..n {
@@ -55,7 +55,7 @@ pub fn period_naive1(s: String) -> usize {
 /// # Arguments
 ///
 /// * `s` - The string to be analyzed
-pub fn period_naive2(s: String) -> usize {
+pub fn period_naive2(s: InputString) -> usize {
     let n = s.len();
     for i in 1..n {
         if s[..n - i] == s[i..] {
@@ -70,7 +70,7 @@ pub fn period_naive2(s: String) -> usize {
 /// # Arguments
 ///
 /// * `s` - The string to be analyzed
-pub fn period_smart(s: String) -> usize {
+pub fn period_smart(s: InputString) -> usize {
     let size = s.len();
 
     // b[i] represents the maximum edge length of s[0..i]
