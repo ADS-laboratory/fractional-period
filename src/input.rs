@@ -174,7 +174,7 @@ impl StringGen {
     /// # Panics
     ///
     /// * Panics if the length of the string to be generated is less than 1
-    pub(crate) fn create_random_string(&self, n: usize) -> Vec<u8> {
+    pub fn create_random_string(&self, n: usize) -> Vec<u8> {
         assert!(
             n > 0,
             "The length of the string to be generated must be greater than 0"
