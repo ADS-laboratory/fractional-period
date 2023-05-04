@@ -6,7 +6,6 @@ use time_complexity_plot::{
     measurements::measure,
     plot::time_plot,
 };
-use time_complexity_plot::input::distribution::Distribution;
 
 fn main() {
     // Create a distribution for the length of the strings

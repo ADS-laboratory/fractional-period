@@ -27,7 +27,7 @@ impl Input for InputString {
         self.len()
     }
 
-    fn generate_input(size: usize, builder: Self::Builder) -> Self {
+    fn generate_input(size: usize, builder: &Self::Builder) -> Self {
         InputString(builder.create_random_string(size))
     }
 }
