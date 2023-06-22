@@ -15,7 +15,7 @@ const ALGORITHMS: [Algorithm; 3] = [PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART];
 /// * `algorithms` - The algorithms to be tested
 fn test_algorithms(input: InputString, expected: usize, algorithms: &[Algorithm]) {
     for algorithm in algorithms {
-        let actual = (algorithm.function)(input.clone());
+        let actual = (algorithm.function)(&input.clone());
         assert_eq!(expected, actual);
     }
 }
@@ -51,4 +51,40 @@ fn test_3() {
     test(input, expected);
 }
 
-// TODO: import VPL tests
+// test used in e-learning page
+
+macro_rules! test {
+    ($(($input:expr, $expected:expr)), *) => {
+        #[test]
+        fn test_examples() {
+            $(
+                let input: InputString = $input.into();
+                let expected = $expected;
+                test(input, expected);
+            )*
+        }
+    };
+}
+
+test!(
+    ("abcabcabc", 3),
+    ("abcabcabca", 3),
+    ("abcabcabcab", 3),
+    ("abab", 2),
+    ("ab", 2),
+    ("abababa", 2),
+    ("abc", 3),
+    ("abca", 3),
+    ("aaa", 1),
+    ("a", 1),
+    ("aaaaaaaa", 1),
+    ("ababaaba", 5),
+    ("ababaababa", 5),
+    ("abcabcaabcabcaabc", 7),
+    ("abcabcaabcabcaabcabca", 7),
+    ("abcabcaabcabcaabcabcab", 17),
+    ("abcabcaabcabcaabcabcabc", 17),
+    ("ababaababaababaa", 5),
+    ("ababaababaababaaababaababaababa", 16),
+    ("abbabaabbaababbabaababbaabbabaab", 24)
+);
