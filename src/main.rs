@@ -1,29 +1,32 @@
+use fractional_period::algorithms::{period_naive1, period_naive2, period_smart};
+use fractional_period::input::{StringGen, StringGenFunction};
+
 use time_complexity_plot::{
-    algorithms::{PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART},
+    input::{distribution::Exponential, InputBuilder},
     measurements::measure,
     plot::time_plot,
-    random::{
-        lengths::{LengthDistribution, EXPONENTIAL},
-        strings::{StringGen, METHOD1},
-        StringsBuilder,
-    },
 };
 
 fn main() {
-    let length_distribution = LengthDistribution::new(EXPONENTIAL, 1000, 500_000);
+    // Create a distribution for the length of the strings
+    let length_distribution = Exponential::new(1000..=500_000);
 
-    let string_gen = StringGen::new(METHOD1, vec!['a', 'b']);
+    // Generation method for the strings
+    let string_gen = StringGen::new(StringGenFunction::CreateRandomString1, vec![b'a', b'b']);
 
-    let strings_builder = StringsBuilder::new(length_distribution, string_gen);
+    // Create the builder for the strings
+    let string_builder = InputBuilder::new(length_distribution, string_gen);
 
-    let strings = strings_builder.create_random_strings(100);
+    // Build the strings
+    let strings = string_builder.build(100);
 
-    let algorithms = vec![PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART];
+    // Create a slice of the algorithms we want to measure
+    let algorithms = [period_naive1, period_naive2, period_smart];
 
-    let results = measure(&strings, &algorithms, 0.01);
+    // Measure the algorithms on the strings
+    let results = measure(&strings, &algorithms, 0.001);
 
-    let file_name = "plotters-doc-data/tick_control.svg";
-
+    // save data to json file
     let result_clone = results.clone();
     result_clone.serialize_json("results.json");
 
@@ -34,5 +37,6 @@ fn main() {
     }
      */
 
-    time_plot(file_name, results);
+    // Plot the results
+    time_plot("plotters-doc-data/tick_control.svg", results, &string_builder);
 }
