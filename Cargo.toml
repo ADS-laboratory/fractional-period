@@ -17,4 +17,5 @@ path = "src/main.rs"
 #time-complexity-plot = { git = "https://github.com/ADS-laboratory/time-complexity-plot", branch = "main" }
 #time-complexity-plot = { path = "../time-complexity-plot", features = ["debug"]}
 time-complexity-plot = { path = "../time-complexity-plot"}
+plotters = "0.3.4"
 rand = "0.8.5"
