@@ -4,6 +4,7 @@ use fractional_period::algorithms::{
 use fractional_period::input::{StringGen, StringGenFunction};
 
 use fractional_period::input_analysis;
+use plotters::style::{BLACK, YELLOW, RED, GREEN};
 use time_complexity_plot::input::distribution::Uniform;
 use time_complexity_plot::plot::PlotConfig;
 use time_complexity_plot::{
@@ -56,22 +57,22 @@ fn main() {
 
     // Input Analysis
     // Create a distribution for the length of the strings
-    let length_distribution = Uniform::new(1000..=500_000);
+    let length_distribution = Uniform::new(1000..=1_000_000);
 
     // Generation method for the strings
     let string_gens = vec![
-        StringGen::new(StringGenFunction::CreateRandomString1, vec![b'a', b'b']),
-        StringGen::new(StringGenFunction::CreateRandomString2, vec![b'a', b'b']),
-        StringGen::new(StringGenFunction::CreateRandomString3, vec![b'a', b'b']),
-        StringGen::new(StringGenFunction::CreateRandomString4, vec![b'a', b'b']),
+        (StringGen::new(StringGenFunction::CreateRandomString1, vec![b'a', b'b']), "CreateRandomString1", BLACK),
+        //(StringGen::new(StringGenFunction::CreateRandomString2, vec![b'a', b'b']), "CreateRandomString2", YELLOW),
+        //(StringGen::new(StringGenFunction::CreateRandomString3, vec![b'a', b'b']), "CreateRandomString3", RED),
+        //(StringGen::new(StringGenFunction::CreateRandomString4, vec![b'a', b'b']), "CreateRandomString4", GREEN),
     ];
 
     // Create the builder for the strings
     let string_builders = string_gens
         .iter()
-        .map(|string_gen| InputBuilder::new(length_distribution.clone(), string_gen.clone()))
+        .map(|(string_gen, str, color)| (InputBuilder::new(length_distribution.clone(), string_gen.clone()), *str, *color))
         .collect::<Vec<_>>();
 
     // Plot the results
-    input_analysis::input_analysis(string_builders);
+    input_analysis::input_analysis(string_builders, "plotters-doc-data/input_analysis.svg");
 }
