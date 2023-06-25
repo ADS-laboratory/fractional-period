@@ -48,7 +48,7 @@ fn create_random_string2(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
     let mut s: Vec<u8> = Vec::with_capacity(n);
     let number_of_chars = char_set.len();
     // TODO: This value should not be generated each time
-    let q = thread_rng().gen_range(0..n);
+    let q = thread_rng().gen_range(1..n);
     for _ in 0..q {
         // generate random character
         let char_index = thread_rng().gen_range(0..number_of_chars);

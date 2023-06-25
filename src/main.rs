@@ -1,5 +1,5 @@
 use fractional_period::algorithms::{
-    period_naive1, period_naive2, period_smart, PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART,
+    PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART,
 };
 use fractional_period::input::{StringGen, StringGenFunction};
 
@@ -57,14 +57,15 @@ fn main() {
 
     // Input Analysis
     // Create a distribution for the length of the strings
-    let length_distribution = Uniform::new(1000..=1_000_000);
+    let length_distribution = Uniform::new(1000..=500_000);
 
     // Generation method for the strings
+    let alphabet = vec![b'a', b'b'];
     let string_gens = vec![
-        (StringGen::new(StringGenFunction::CreateRandomString1, vec![b'a', b'b']), "CreateRandomString1", BLACK),
-        //(StringGen::new(StringGenFunction::CreateRandomString2, vec![b'a', b'b']), "CreateRandomString2", YELLOW),
-        //(StringGen::new(StringGenFunction::CreateRandomString3, vec![b'a', b'b']), "CreateRandomString3", RED),
-        //(StringGen::new(StringGenFunction::CreateRandomString4, vec![b'a', b'b']), "CreateRandomString4", GREEN),
+        (StringGen::new(StringGenFunction::CreateRandomString1, alphabet.clone()), "CreateRandomString1", BLACK),
+        (StringGen::new(StringGenFunction::CreateRandomString2, alphabet.clone()), "CreateRandomString2", YELLOW),
+        (StringGen::new(StringGenFunction::CreateRandomString3, alphabet.clone()), "CreateRandomString3", RED),
+        (StringGen::new(StringGenFunction::CreateRandomString4, alphabet.clone()), "CreateRandomString4", GREEN),
     ];
 
     // Create the builder for the strings
@@ -73,6 +74,6 @@ fn main() {
         .map(|(string_gen, str, color)| (InputBuilder::new(length_distribution.clone(), string_gen.clone()), *str, *color))
         .collect::<Vec<_>>();
 
-    // Plot the results
+    // Plot a graph of with the input generation analysis
     input_analysis::input_analysis(string_builders, "plotters-doc-data/input_analysis.svg");
 }
