@@ -6,7 +6,7 @@ use fractional_period::input::{StringGen, StringGenFunction};
 use fractional_period::input_analysis;
 use plotters::style::{BLACK, YELLOW, RED, GREEN};
 use time_complexity_plot::input::distribution::Uniform;
-use time_complexity_plot::plot::PlotConfig;
+use time_complexity_plot::plot::{PlotConfig, Scale};
 use time_complexity_plot::{
     input::{distribution::Exponential, InputBuilder},
     measurements::measure,
@@ -49,7 +49,7 @@ fn main() {
 
     // Plot the results
     let config = PlotConfig::default()
-        .with_builder(&string_builder)
+        .with_scale(Scale::LogLog)
         .with_title("Fractional Period")
         .with_caption("The time plot of fractional period algorithms");
 
