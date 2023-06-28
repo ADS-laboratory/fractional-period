@@ -89,18 +89,17 @@ pub fn input_analysis<D: Distribution>(
         while prob_analysis.last() == Some(&0) {
             prob_analysis.pop();
         }
+        let max_x = (prob_analysis.len() - 1) as u32;
+        let max_y = *(prob_analysis.iter().max().unwrap()) as u32;
         println!("Probability analysis of {}: {:?}", name, prob_analysis);
-    }
-
-    println!("==================================================");
-    println!("Input generation analysis results saved to {}", path);
 
 
-    // Histograms
-    // One histogram showing probability of each period length for each input generation method
-    let dir = "plotters-doc-data/histogram";
-    let extension = ".png";
-    for (i, (input, name, color)) in input_gen.iter().enumerate() {
+
+
+        // Histograms
+        // One histogram showing probability of each period length for each input generation method
+        let dir = "plotters-doc-data/histogram";
+        let extension = ".png";
         let path = &(dir.to_string() + *name + extension);
         println!("Histogram path: {}", path);
         let root = BitMapBackend::new(path.as_str(), (640, 480)).into_drawing_area();
@@ -112,7 +111,7 @@ pub fn input_analysis<D: Distribution>(
         .y_label_area_size(40)
         .margin(5)
         .caption("Histogram Test", ("sans-serif", 50.0))
-        .build_cartesian_2d((0u32..10u32).into_segmented(), 0u32..10u32).unwrap();
+        .build_cartesian_2d((0u32..max_x).into_segmented(), 0u32..max_y).unwrap();
 
         chart
         .configure_mesh()
@@ -123,20 +122,29 @@ pub fn input_analysis<D: Distribution>(
         .axis_desc_style(("sans-serif", 15))
         .draw().unwrap();
 
-        let data = [
-        0u32, 1, 1, 1, 4, 2, 5, 7, 8, 6, 4, 2, 1, 8, 3, 3, 3, 4, 4, 3, 3, 3,
-        ];
+        let mut prob_analysis = vec![0u32; 500_000];
+        for (i, s) in strings.inputs.iter().flatten().map(|string| {
+            (
+                string.get_size() as u32,
+                period_smart(string) as u32,
+            )
+        }).enumerate() {
+            prob_analysis[i] = s.0 - s.1;
+        }
 
         chart.draw_series(
             Histogram::vertical(&chart)
                 .style(RED.mix(0.5).filled())
-                .data(data.iter().map(|x: &u32| (*x, 1))),
+                .data(prob_analysis.iter().map(|x: &u32| (*x, 1))),
         ).unwrap();
 
         // To avoid the IO failure being ignored silently, we manually call the present function
         root.present().expect("Unable to write result to file, please make sure 'plotters-doc-data' dir exists under current dir");
         println!("Result has been saved to {}", path);
     }
+
+    println!("==================================================");
+    println!("Input generation analysis results saved to {}", path);
 }
 
 fn mean(values: impl Iterator<Item = usize>) -> usize {
