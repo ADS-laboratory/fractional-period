@@ -1,6 +1,9 @@
-use fractional_period::algorithms::{period_naive1, period_naive2, period_smart};
+use fractional_period::algorithms::{
+    PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART,
+};
 use fractional_period::input::{StringGen, StringGenFunction};
 
+use time_complexity_plot::plot::{PlotConfig, Scale};
 use time_complexity_plot::{
     input::{distribution::Exponential, InputBuilder},
     measurements::measure,
@@ -21,7 +24,11 @@ fn main() {
     let strings = string_builder.build(100);
 
     // Create a slice of the algorithms we want to measure
-    let algorithms = [period_naive1, period_naive2, period_smart];
+    let algorithms = [
+        (PERIOD_NAIVE1.function, PERIOD_NAIVE1.name),
+        (PERIOD_NAIVE2.function, PERIOD_NAIVE2.name),
+        (PERIOD_SMART.function, PERIOD_SMART.name),
+    ];
 
     // Measure the algorithms on the strings
     let results = measure(&strings, &algorithms, 0.001);
@@ -38,5 +45,10 @@ fn main() {
      */
 
     // Plot the results
-    time_plot("plotters-doc-data/tick_control.svg", results, &string_builder);
+    let config = PlotConfig::default()
+        .with_scale(Scale::LogLog)
+        .with_title("Fractional Period")
+        .with_caption("The time plot of fractional period algorithms");
+
+    time_plot("plotters-doc-data/tick_control.svg", results, &config);
 }
