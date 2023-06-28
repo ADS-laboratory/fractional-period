@@ -3,6 +3,8 @@ use plotters::{
     series::LineSeries,
     style::{AsRelative, Color, IntoFont, RGBColor, BLACK, WHITE},
 };
+use plotters::backend::BitMapBackend;
+use plotters::prelude::{Histogram, IntoSegmentedCoord, RED};
 use time_complexity_plot::input::{distribution::Distribution, Input, InputBuilder};
 
 use crate::{algorithms::period_smart, input::InputString};
@@ -40,7 +42,7 @@ pub fn input_analysis<D: Distribution>(
         .draw()
         .unwrap();
 
-    let n = 1000;
+    let n = 100;
     let repetitions = 10;
     let _tot = n * repetitions;
 
@@ -93,15 +95,15 @@ pub fn input_analysis<D: Distribution>(
     println!("==================================================");
     println!("Input generation analysis results saved to {}", path);
 
-    /*
+
     // Histograms
     // One histogram showing probability of each period length for each input generation method
     let dir = "plotters-doc-data/histogram";
-    let extension = ".svg";
+    let extension = ".png";
     for (i, (input, name, color)) in input_gen.iter().enumerate() {
         let path = &(dir.to_string() + *name + extension);
         println!("Histogram path: {}", path);
-        let root = BitMapBackend::new(path, (640, 480)).into_drawing_area();
+        let root = BitMapBackend::new(path.as_str(), (640, 480)).into_drawing_area();
 
         root.fill(&WHITE).unwrap();
 
@@ -134,8 +136,7 @@ pub fn input_analysis<D: Distribution>(
         // To avoid the IO failure being ignored silently, we manually call the present function
         root.present().expect("Unable to write result to file, please make sure 'plotters-doc-data' dir exists under current dir");
         println!("Result has been saved to {}", path);
-        }
-    */
+    }
 }
 
 fn mean(values: impl Iterator<Item = usize>) -> usize {
