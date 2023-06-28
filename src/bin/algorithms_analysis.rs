@@ -1,18 +1,16 @@
-use fractional_period::algorithms::{
-    PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART,
-};
+use fractional_period::algorithms::{PERIOD_NAIVE1, PERIOD_NAIVE1_UNCHECKED, PERIOD_NAIVE2, PERIOD_SMART};
 use fractional_period::input::{StringGen, StringGenFunction};
 
 use time_complexity_plot::plot::{PlotConfig, Scale};
 use time_complexity_plot::{
-    input::{distribution::Exponential, InputBuilder},
+    input::{distribution, InputBuilder},
     measurements::measure,
     plot::time_plot,
 };
 
 fn main() {
     // Create a distribution for the length of the strings
-    let length_distribution = Exponential::new(1000..=500_000);
+    let length_distribution = distribution::Reciprocal::new(1000..=500_000);
 
     // Generation method for the strings
     let string_gen = StringGen::new(StringGenFunction::CreateRandomString1, vec![b'a', b'b']);

@@ -9,10 +9,6 @@ edition = "2021"
 name = "fractional_period"
 path = "src/lib.rs"
 
-[[bin]]
-name = "binary"
-path = "src/main.rs"
-
 [dependencies]
 time-complexity-plot = { git = "https://github.com/ADS-laboratory/time-complexity-plot", branch = "lib" }
 #time-complexity-plot = { git = "https://github.com/ADS-laboratory/time-complexity-plot", branch = "lib", features = ["debug"]}
