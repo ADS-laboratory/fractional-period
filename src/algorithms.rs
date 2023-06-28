@@ -88,7 +88,6 @@ pub fn period_smart(s: &InputString) -> usize {
         // the maximum edge of the prefix
         while s[x] != s[i] && x > 0 {
             x = b[x - 1];
-            //print b
         }
 
         // if they are equal then the length of the maximum edge is increased

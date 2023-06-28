@@ -1,4 +1,4 @@
-use fractional_period::algorithms::{PERIOD_NAIVE1, PERIOD_NAIVE1_UNCHECKED, PERIOD_NAIVE2, PERIOD_SMART};
+use fractional_period::algorithms::{PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART};
 use fractional_period::input::{StringGen, StringGenFunction};
 
 use time_complexity_plot::plot::{PlotConfig, Scale};
