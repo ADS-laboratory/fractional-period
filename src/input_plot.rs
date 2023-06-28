@@ -90,6 +90,10 @@ pub fn input_analysis<D: Distribution>(
             prob_analysis.pop();
         }
         let max_x = (prob_analysis.len() - 1) as u32;
+        let mut step = 1;
+        if max_x > 25 {
+            step = (max_x as f64 / 25.0).ceil() as u32;
+        }
         let max_y = *(prob_analysis.iter().max().unwrap()) as u32;
         println!("Probability analysis of {}: {:?}", name, prob_analysis);
 
@@ -111,7 +115,7 @@ pub fn input_analysis<D: Distribution>(
         .y_label_area_size(40)
         .margin(5)
         .caption("Histogram Test", ("sans-serif", 50.0))
-        .build_cartesian_2d((0u32..max_x).into_segmented(), 0u32..max_y).unwrap();
+        .build_cartesian_2d((0u32..(max_x / step)).into_segmented(), 0u32..(max_y * step)).unwrap();
 
         chart
         .configure_mesh()
@@ -129,7 +133,7 @@ pub fn input_analysis<D: Distribution>(
                 period_smart(string) as u32,
             )
         }).enumerate() {
-            prob_analysis[i] = s.0 - s.1;
+            prob_analysis[i] = (s.0 - s.1) / step;
         }
 
         chart.draw_series(
