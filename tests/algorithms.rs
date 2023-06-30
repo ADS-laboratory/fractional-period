@@ -32,21 +32,21 @@ fn test(input: InputString, expected: usize) {
 
 #[test]
 fn test_1() {
-    let input: InputString = "abcabcab".into();
+    let input: InputString = "abcabcab".try_into().unwrap();
     let expected = 3;
     test(input, expected);
 }
 
 #[test]
 fn test_2() {
-    let input: InputString = "aba".into();
+    let input: InputString = "aba".try_into().unwrap();
     let expected = 2;
     test(input, expected);
 }
 
 #[test]
 fn test_3() {
-    let input = "abca".into();
+    let input = "abca".try_into().unwrap();
     let expected = 3;
     test(input, expected);
 }
@@ -58,7 +58,7 @@ macro_rules! test {
         #[test]
         fn test_examples() {
             $(
-                let input: InputString = $input.into();
+                let input: InputString = $input.try_into().unwrap();
                 let expected = $expected;
                 test(input, expected);
             )*

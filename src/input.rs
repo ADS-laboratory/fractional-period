@@ -2,13 +2,28 @@ use rand::{thread_rng, Rng};
 use std::ops::Deref;
 use time_complexity_plot::input::Input;
 
+/// Struct that represent an input string.
+///
+/// The input string is represented as a vector of bytes because of how Rust handles strings.
+/// The `String` type provided by Rust represents a sequence of characters encoded in UTF-8, which
+/// means that a single character can be represented by multiple bytes. For this reason, Rust does
+/// not provide a way to index a string (e.g. `string[0]`).
+/// Since all measurements are performed with a low number of characters we decided to use a vector
+/// of bytes to represent the strings and therefore limit ourselves to ascii characters only.
 #[derive(Clone)]
 pub struct InputString(pub Vec<u8>);
 
-impl From<&str> for InputString {
-    fn from(s: &str) -> Self {
-        // TODO: check for ascii characters
-        InputString(s.as_bytes().to_vec())
+/// Convert a string to an `InputString`.
+impl TryFrom<&str> for InputString {
+    type Error = ();
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        if s.chars().all(|c| c.is_ascii()) {
+            Ok(InputString(s.as_bytes().to_vec()))
+        } else {
+            Err(())
+        }
+
     }
 }
 
@@ -20,6 +35,7 @@ impl Deref for InputString {
     }
 }
 
+/// Implementation of the `Input` trait of time-complexity-plot for `InputString`.
 impl Input for InputString {
     type Builder = StringGen;
 
@@ -75,7 +91,7 @@ fn create_random_string3(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
 
     let mut s: Vec<u8> = Vec::with_capacity(n);
     let number_of_chars = char_set.len();
-    let q = thread_rng().gen_range(0..n);
+    let q = thread_rng().gen_range(1..n);
     for _ in 0..q - 1 {
         // generate random character
         let char_index = thread_rng().gen_range(0..number_of_chars);
@@ -102,6 +118,7 @@ fn create_random_string4(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
     s
 }
 
+/// Enum that represents the different functions that can be used to generate a random string.
 pub enum StringGenFunction {
     CreateRandomString1,
     CreateRandomString2,
@@ -110,6 +127,7 @@ pub enum StringGenFunction {
 }
 
 impl StringGenFunction {
+    /// Returns the function associated with the enum value.
     fn get_function(&self) -> fn(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
         match self {
             StringGenFunction::CreateRandomString1 => create_random_string1,
@@ -120,6 +138,7 @@ impl StringGenFunction {
     }
 }
 
+/// Struct that represents a string generator.
 #[derive(Clone)]
 pub struct StringGen {
     pub function: fn(n: usize, char_set: &Vec<u8>) -> Vec<u8>,
