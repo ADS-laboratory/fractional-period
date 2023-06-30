@@ -68,39 +68,8 @@ pub fn input_analysis<D: Distribution>(
             .label(*name)
             .legend(move |(x, y)| Rectangle::new([(x, y - 5), (x + 10, y + 5)], color.filled()));
 
-        println!("done");
 
-
-        // PROBABILITY ANALYSIS
-        println!("PROBABILITY ANALYSIS");
-        // Analyze the period of the strings in relation to their length
-        // The result is a vector where the index is the difference between the length of the string and its period
-        // and the value is the number of strings with that difference
-        let mut prob_analysis = vec![0usize; 500_000];
-        for s in strings.inputs.iter().flatten().map(|string| {
-            (
-                string.get_size(),
-                period_smart(string),
-            )
-        }) {
-            prob_analysis[s.0 - s.1] += 1;
-        }
-        // Remove all final 0s from the vector
-        while prob_analysis.last() == Some(&0) {
-            prob_analysis.pop();
-        }
-        let max_x = (prob_analysis.len() - 1) as u32;
-        let mut step = 1;
-        if max_x > 25 {
-            step = (max_x as f64 / 25.0).ceil() as u32;
-        }
-        let max_y = *(prob_analysis.iter().max().unwrap()) as u32;
-        println!("Probability analysis of {}: {:?}", name, prob_analysis);
-
-
-
-
-        // Histograms
+        // HISTOGRAMS
         // One histogram showing probability of each period length for each input generation method
         let dir = "plotters-doc-data/histogram";
         let extension = ".png";
@@ -110,12 +79,62 @@ pub fn input_analysis<D: Distribution>(
 
         root.fill(&WHITE).unwrap();
 
+        let mut prob_analysis = Vec::new();
+        for s in strings.inputs.iter().flatten().map(|string| {
+            (
+                string.get_size() as u32,
+                period_smart(string) as u32,
+            )
+        }) {
+            prob_analysis.push(s.0 - s.1);
+        }
+
+        // Find the number of buckets (i.e. the max x value)
+        let mut max_x = 0;
+        for x in prob_analysis.iter() {
+            if *x > max_x {
+                max_x = *x;
+            }
+        }
+        // If the max x value is more than 25, we want to reduce the number of buckets
+        // by summing up values in intervals of buckets
+        let step = (max_x as f64 / 25.0).ceil() as u32;
+        if max_x > 25 {
+            let mut new_prob_analysis = Vec::new();
+            for x in prob_analysis.iter() {
+                new_prob_analysis.push(*x / step);
+            }
+            prob_analysis = new_prob_analysis;
+        }
+        max_x = max_x / step;
+
+        // Find number that apperars most often in the vector (i.e. the max y value)
+        let mut prob_analysis_sorted = prob_analysis.clone();
+        prob_analysis_sorted.sort();
+        let mut past_x = prob_analysis_sorted[0];
+        let mut max_y = 1;
+        let mut i = 0;
+        for x in prob_analysis_sorted.iter() {
+            if *x == past_x {
+                i += 1;
+            } else {
+                if i > max_y {
+                    max_y = i;
+                }
+                i = 1;
+                past_x = *x;
+            }
+        }
+        if i > max_y {
+            max_y = i;
+        }
+
         let mut chart = ChartBuilder::on(&root)
         .x_label_area_size(35)
         .y_label_area_size(40)
         .margin(5)
         .caption("Histogram Test", ("sans-serif", 50.0))
-        .build_cartesian_2d((0u32..(max_x / step)).into_segmented(), 0u32..(max_y * step)).unwrap();
+        .build_cartesian_2d((0u32..max_x).into_segmented(), 0u32..max_y).unwrap();
 
         chart
         .configure_mesh()
@@ -125,16 +144,6 @@ pub fn input_analysis<D: Distribution>(
         .x_desc("Bucket")
         .axis_desc_style(("sans-serif", 15))
         .draw().unwrap();
-
-        let mut prob_analysis = vec![0u32; 500_000];
-        for (i, s) in strings.inputs.iter().flatten().map(|string| {
-            (
-                string.get_size() as u32,
-                period_smart(string) as u32,
-            )
-        }).enumerate() {
-            prob_analysis[i] = (s.0 - s.1) / step;
-        }
 
         chart.draw_series(
             Histogram::vertical(&chart)
