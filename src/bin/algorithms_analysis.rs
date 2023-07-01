@@ -48,5 +48,5 @@ fn main() {
         .with_title("Fractional Period")
         .with_caption("The time plot of fractional period algorithms");
 
-    time_plot("plotters-do-data/tick_control.svg", results, &config);
+    time_plot("results/tick_control.svg", results, &config);
 }

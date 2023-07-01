@@ -28,7 +28,7 @@ pub fn input_analysis<D: Distribution>(
     // COMPARISON GRAPH //
     // ---------------- //
     // Where the graph will be saved.
-    let path = "plotters-doc-data/input_analysis.svg";
+    let path = "results/input_analysis.svg";
 
     // Create the graph.
     let root =
@@ -106,7 +106,7 @@ pub fn input_analysis<D: Distribution>(
         let strings = input.build_with_repetitions(n, repetitions);
 
         // One histogram showing probability of fractional period length for each input generation method.
-        let dir = "plotters-doc-data/";
+        let dir = "results/";
         let extension = ".png";
         let path = &(dir.to_string() + *name + extension);
         let root = BitMapBackend::new(path.as_str(), (640, 480)).into_drawing_area();
@@ -192,7 +192,7 @@ pub fn input_analysis<D: Distribution>(
             .unwrap();
 
         // To avoid the IO failure being ignored silently, we manually call the present function.
-        root.present().expect("Unable to write result to file, please make sure 'plotters-doc-data' dir exists under current dir");
+        root.present().expect("Unable to write result to file, please make sure 'results' dir exists under current dir");
         println!(
             "Probability distibution analysis of the the input generation method {} saved to {}",
             name, path
