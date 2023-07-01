@@ -1,5 +1,3 @@
-use std::path;
-
 use plotters::backend::BitMapBackend;
 use plotters::prelude::{Histogram, IntoSegmentedCoord, RED};
 use plotters::{
@@ -7,6 +5,7 @@ use plotters::{
     series::LineSeries,
     style::{AsRelative, Color, IntoFont, RGBColor, BLACK, WHITE},
 };
+use plotters::chart::SeriesLabelPosition;
 use time_complexity_plot::input::{distribution::Distribution, Input, InputBuilder};
 
 use crate::{algorithms::period_smart, input::InputString};
@@ -69,6 +68,7 @@ pub fn input_analysis<D: Distribution>(
 
     // Iterate over the input generation methods.
     for (_i, (input, name, color)) in input_gen.iter().enumerate() {
+
         // Build the strings.
         let strings = input.build_with_repetitions(n, repetitions);
 
@@ -88,10 +88,23 @@ pub fn input_analysis<D: Distribution>(
             .unwrap()
             .label(*name)
             .legend(move |(x, y)| Rectangle::new([(x, y - 5), (x + 10, y + 5)], color.filled()));
+    }
 
-        // ------------------------------- //
-        // PROBABILITY DISTRIBUTION GRAPHS //
-        // ------------------------------- //
+    chart
+        .configure_series_labels()
+        .border_style(BLACK)
+        .position(SeriesLabelPosition::LowerRight)
+        .draw()
+        .unwrap();
+
+    // ------------------------------- //
+    // PROBABILITY DISTRIBUTION GRAPHS //
+    // ------------------------------- //
+    for (_i, (input, name, _)) in input_gen.iter().enumerate() {
+
+        // Build the strings.
+        let strings = input.build_with_repetitions(n, repetitions);
+
         // One histogram showing probability of fractional period length for each input generation method.
         let dir = "plotters-doc-data/";
         let extension = ".png";
