@@ -1,8 +1,8 @@
 use fractional_period::algorithms::{PERIOD_NAIVE1, PERIOD_NAIVE2, PERIOD_SMART};
 use fractional_period::input::{StringGen, StringGenFunction};
 
-use time_complexity_plot::plot::{PlotConfig, Scale};
-use time_complexity_plot::{
+use chrono_probe::plot::{PlotConfig, Scale};
+use chrono_probe::{
     input::{distribution, InputBuilder},
     measurements::measure,
     plot::time_plot,

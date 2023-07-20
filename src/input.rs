@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 use std::ops::Deref;
-use time_complexity_plot::input::Input;
+use chrono_probe::input::Input;
 
 /// Struct that represent an input string.
 ///

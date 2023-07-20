@@ -7,7 +7,7 @@ use plotters::{
     series::LineSeries,
     style::{AsRelative, Color, IntoFont, BLACK, WHITE},
 };
-use time_complexity_plot::input::{distribution::Distribution, Input, InputBuilder};
+use chrono_probe::input::{distribution::Distribution, Input, InputBuilder};
 
 use crate::{algorithms::period_smart, input::InputString};
 

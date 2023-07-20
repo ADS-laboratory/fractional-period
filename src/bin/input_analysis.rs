@@ -1,8 +1,8 @@
 use fractional_period::input::{StringGen, StringGenFunction};
 
 use fractional_period::input_plot;
-use time_complexity_plot::input::distribution::Uniform;
-use time_complexity_plot::input::InputBuilder;
+use chrono_probe::input::distribution::Uniform;
+use chrono_probe::input::InputBuilder;
 
 fn main() {
     // Input Analysis
