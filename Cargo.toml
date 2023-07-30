@@ -10,6 +10,6 @@ name = "fractional_period"
 path = "src/lib.rs"
 
 [dependencies]
-chrono-probe = { git = "https://github.com/ADS-laboratory/chrono-probe", branch = "main", features = ["debug"] }
+chrono-probe = { git = "https://github.com/ADS-laboratory/chrono-probe", branch = "main" }
 plotters = "0.3.4"
 rand = "0.8.5"

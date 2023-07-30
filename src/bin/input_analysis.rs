@@ -8,7 +8,7 @@ fn main() {
     // Input Analysis
     // Create a distribution for the length of the strings
     let distribution_max = 500_000;
-    let length_distribution = Uniform::new(1000..=distribution_max);
+    let length_distribution = Uniform::new(500_000..=distribution_max);
 
     // Generation method for the strings
     let alphabet = vec![b'a', b'b'];
@@ -43,5 +43,5 @@ fn main() {
         .collect::<Vec<_>>();
 
     // Plot a graph of with the input generation analysis
-    input_plot::input_analysis(string_builders, distribution_max, 100, 10);
+    input_plot::input_analysis(string_builders, distribution_max, 1, 1000);
 }

@@ -107,14 +107,8 @@ fn create_random_string3(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
 }
 
 fn create_random_string4(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
-    let mut s = Vec::with_capacity(n);
-    let number_of_chars = char_set.len();
-    let mut char = char_set[0];
-    for i in 0..n - 1 {
-        char = char_set[i % number_of_chars];
-        s.push(char);
-    }
-    s.push(char);
+    let mut s = vec![char_set[0]; n];
+    s[n-1] = char_set[1];
     s
 }
 
