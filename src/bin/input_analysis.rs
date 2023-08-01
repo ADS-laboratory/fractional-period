@@ -1,8 +1,9 @@
+use fractional_period::algorithms::PERIOD_SMART;
 use fractional_period::input::{StringGen, StringGenFunction};
 
-use fractional_period::input_plot;
 use chrono_probe::input::distribution::Uniform;
 use chrono_probe::input::InputBuilder;
+use fractional_period::input_plot;
 
 fn main() {
     // Input Analysis
@@ -44,4 +45,16 @@ fn main() {
 
     // Plot a graph of with the input generation analysis
     input_plot::input_analysis(string_builders, distribution_max, 1, 1000);
+
+    // TODO: da finire l'expected value
+    let input_set = InputBuilder::new(
+        length_distribution,
+        StringGen::new(StringGenFunction::CreateRandomString1, alphabet.clone()),
+    )
+    .build(1000);
+
+    let expected_value = PERIOD_SMART.expected_value(&input_set);
+
+    println!("Expected value: {}", expected_value);
+    println!("Expected edge value: {}", 500_000.0 - expected_value);
 }

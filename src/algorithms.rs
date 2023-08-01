@@ -1,3 +1,5 @@
+use chrono_probe::input::InputSet;
+
 use crate::input::InputString;
 
 /// Representation of an algorithm &\[[u8]] -> [usize]
@@ -6,6 +8,23 @@ pub struct Algorithm {
     pub name: &'static str,
     /// The function implemented by the algorithm
     pub function: fn(&InputString) -> usize,
+}
+
+impl Algorithm {
+    /// Compute empirically the expected value of the algorithm with the given input set.
+    pub fn expected_value(&self, input_set: &InputSet<InputString>) -> f64 {
+        let flattened_input_set = input_set
+            .inputs
+            .iter()
+            .flatten()
+            .collect::<Vec<&InputString>>();
+        let size = flattened_input_set.len();
+        let mut sum = 0.0;
+        for input in flattened_input_set {
+            sum += (self.function)(input) as f64;
+        }
+        sum / size as f64
+    }
 }
 
 // Some predefined algorithms for finding the period of a string:
