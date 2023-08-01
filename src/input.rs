@@ -64,7 +64,7 @@ fn create_random_string2(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
     let mut s: Vec<u8> = Vec::with_capacity(n);
     let number_of_chars = char_set.len();
     // TODO: This value should not be generated each time
-    let q = thread_rng().gen_range(1..n);
+    let q = thread_rng().gen_range(1..=n);
     for _ in 0..q {
         // generate random character
         let char_index = thread_rng().gen_range(0..number_of_chars);
@@ -91,15 +91,15 @@ fn create_random_string3(n: usize, char_set: &Vec<u8>) -> Vec<u8> {
 
     let mut s: Vec<u8> = Vec::with_capacity(n);
     let number_of_chars = char_set.len();
-    let q = thread_rng().gen_range(1..n);
-    for _ in 0..q {
+    let q = thread_rng().gen_range(1..=n);
+    for _ in 0..q-1 {
         // generate random character
         let char_index = thread_rng().gen_range(0..number_of_chars);
         let char = char_set[char_index];
         s.push(char);
     }
     s.push(new_char(char_set));
-    for i in q+1..n {
+    for i in q..n {
         let char = s[i % q];
         s.push(char);
     }

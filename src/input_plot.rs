@@ -127,6 +127,12 @@ pub fn input_analysis<D: Distribution>(
                 max_x = *x;
             }
         }
+
+        if max_x == 0 {
+            println!("Input generation method {} generated strings with fractional period 0, skipping histogram", name);
+            continue;
+        }
+
         // If the max x value is more than 25, we want to reduce the number of buckets to 25
         // by summing up values in intervals of buckets.
         let step = (max_x as f64 / 25.0).ceil() as u32;
